@@ -1,4 +1,6 @@
 import { Form, Formik } from "formik"
+import { signIn } from "next-auth/react"
+import { useRouter } from "next/router"
 import { useState } from "react"
 import { z } from "zod"
 import { toFormikValidationSchema } from "zod-formik-adapter"
@@ -10,9 +12,13 @@ import Label from "~/components/forms/Label"
 const Auth = () => {
 
     const [isLogin, setIsLogin] = useState(true)
+    const [error, setError] = useState<String>('')
+
+    const { replace } = useRouter()
 
     const Schema = z.object({
-        email: isLogin ? z.never() : z.string().email(),
+        email: isLogin ? z.optional(z.string().email()) : z.string().email(),
+        // email: z.optional(z.string().email()),
         username: z.string().min(5),
         password: z.string().min(8)
     });
@@ -21,8 +27,66 @@ const Auth = () => {
         email: '',
         username: '',
         password: '',
+    }
+
+    async function handleSignIn(values: {
+        email: String,
+        password: String,
+        username?: String
+    }) {
+        const result = await signIn("credentials", {
+            redirect: false,
+            email: values.email,
+            password: values.password,
+        });
+
+        if (!result?.ok) {
+            setError("البريد الالكتروني او كلمة المرور غير صحيحة");
+
+            setTimeout(() => {
+                setError('');
+            }, 3000)
+        } else {
+
+            // toast.success('Welcome back !', {
+            //     theme: "colored",
+            // })
+            replace("/")
+
+        }
+
 
     }
+
+    async function handleSignUp(values: {
+        email: String,
+        password: String,
+        username: String
+    }) {
+        const result = await signIn("credentials", {
+            redirect: false,
+            email: values.email,
+            password: values.password,
+        });
+
+        if (!result?.ok) {
+            setError("البريد الالكتروني او كلمة المرور غير صحيحة");
+
+            setTimeout(() => {
+                setError('');
+            }, 3000)
+        } else {
+
+            // toast.success('Welcome back !', {
+            //     theme: "colored",
+            // })
+            replace("/")
+
+        }
+
+
+    }
+
     return (
         <div className="bg-no-repeat bg-cover bg-center relative bg-red-300">
             <div className="absolute bg-gradient-to-b from-green-500 to-green-400 opacity-75 inset-0 z-0"></div>
@@ -55,7 +119,6 @@ const Auth = () => {
                                 handleChange,
                                 errors,
                                 touched,
-                                setFieldValue,
                             }) => (
 
                                 <Form>
@@ -69,6 +132,7 @@ const Auth = () => {
                                                 onBlur={handleBlur}
                                                 touched={touched.username}
                                                 error={errors.username}
+                                                id='username'
                                                 type="text"
                                                 placeholder="example"
                                             />
@@ -82,6 +146,7 @@ const Auth = () => {
                                                     onBlur={handleBlur}
                                                     touched={touched.email}
                                                     error={errors.email}
+                                                    id='email'
                                                     type="text"
                                                     placeholder="example@gmail.com" />
                                             </div>
@@ -96,13 +161,14 @@ const Auth = () => {
                                                 onBlur={handleBlur}
                                                 touched={touched.password}
                                                 error={errors.password}
-                                                type="text"
+                                                id='password'
+                                                type="password"
                                                 placeholder="********" />
 
                                         </div>
 
                                         <div>
-                                            <Button type="button">Submit </Button>
+                                            <Button type="submit">Submit </Button>
                                         </div>
                                     </div>
                                 </Form>
