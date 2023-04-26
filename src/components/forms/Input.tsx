@@ -1,9 +1,18 @@
 import { InputHTMLAttributes } from "react"
 
-
-export default (props: React.HTMLProps<HTMLInputElement>) => {
+interface Props extends React.ComponentProps<'input'> {
+    touched?: boolean;
+    error?: string;
+    label?: string;
+}
+export default (props: Props) => {
 
     return (
-        <input type={props.type} placeholder="Type here" className={`input input-bordered w-full max-w-xs ${props.className}`} />
+        <input
+         type={props.type} 
+        className={`input input-bordered w-full max-w-xs ${props.className}`}
+        {...props}
+
+         />
     )
 }
