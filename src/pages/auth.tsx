@@ -16,14 +16,13 @@ const Auth = () => {
 
     const [error, setError] = useState<String>('')
 
-    const { mutateAsync } = api.
+    const { mutateAsync } = api.auth.signUp.useMutation()
 
 
     const { replace } = useRouter()
 
     const Schema = z.object({
         email: isLogin ? z.optional(z.string().email()) : z.string().email(),
-        // email: z.optional(z.string().email()),
         username: z.string().min(5),
         password: z.string().min(8)
     });
@@ -67,19 +66,22 @@ const Auth = () => {
 
     }
 
-    async function handleSignUp(values: {
-        email: String,
-        password: String,
-        username: String
-    }) {
+    async function handleSignUp(values: any) {
+
+        const user = await mutateAsync({
+            email : values.email,
+            username :values.username,
+            password: values.password
+        })
+        console.log('user' , user);
+        
         const result = await signIn("credentials", {
             redirect: false,
             username: values.username,
             password: values.password,
         });
 
-        console.log(result);
-        console.log(222);
+        console.log('result' , result);
         
 
         if (!result?.ok) {
