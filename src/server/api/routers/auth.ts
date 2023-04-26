@@ -8,50 +8,45 @@ import {
   protectedProcedure,
 } from "~/server/api/trpc";
 import { prisma } from "~/server/db";
+import { hash } from "~/utils/hashHelper";
 
 
-export const exampleRouter = createTRPCRouter({
-  hello: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(({ input }) => {
-      return {
-        greeting: `Hello ${input.text}`
-      };
-    }),
-    signUp: publicProcedure
+export const authRouter = createTRPCRouter({
+  signUp: publicProcedure
     .input(z.object({
-        username: z.string(),
-        email: z.string().email(),
-        password: z.string()
+      username: z.string(),
+      email: z.string().email(),
+      password: z.string()
     }))
 
     .mutation(async ({ input }) => {
 
+      console.log(input)
 
-        const userExists = await prisma.user.findUnique({
-            where: {
-                username: input.username
-            }
-        })
 
-        if (userExists) {
-            throw new TRPCClientError('User already exists')
+      const userExists = await prisma.user.findFirst({
+        where: {
+          username: input.username
         }
+      })
 
-        const user = await prisma.user.create({
-            data: {
-                username: input.username,
-                email: input.email,
-                password: hash(input.password)
+      if (userExists) {
+        throw new TRPCClientError('User already exists')
+      }
 
-            }
-        })
-        console.log(user);
+      const user = await prisma.user.create({
+        data: {
+          username: input.username,
+          email: input.email,
+          password: hash(input.password)
+        }
+      })
+      console.log(user);
 
-        return {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-        };
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      };
     }),
 });

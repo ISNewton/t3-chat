@@ -8,11 +8,16 @@ import Button from "~/components/buttons/Button"
 import Checkbox from "~/components/forms/Checkbox"
 import Input from "~/components/forms/Input"
 import Label from "~/components/forms/Label"
+import { api } from "~/utils/api"
 
 const Auth = () => {
 
     const [isLogin, setIsLogin] = useState(true)
+
     const [error, setError] = useState<String>('')
+
+    const { mutateAsync } = api.
+
 
     const { replace } = useRouter()
 
@@ -73,7 +78,7 @@ const Auth = () => {
             password: values.password,
         });
 
-        console.log(result,);
+        console.log(result);
         console.log(222);
         
 
@@ -132,6 +137,8 @@ const Auth = () => {
                                 <Form>
 
                                     <div className="space-y-5">
+
+                                       <p className="text-red-500">{error}</p>
                                         <div className="space-y-2">
                                             <Label>Username </Label>
                                             <Input
