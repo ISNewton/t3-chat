@@ -5,13 +5,14 @@ import {
   publicProcedure,
   protectedProcedure,
 } from "~/server/api/trpc";
+import { prisma } from "~/server/db";
 
 export const exampleRouter = createTRPCRouter({
   hello: publicProcedure
     .input(z.object({ text: z.string() }))
     .query(({ input }) => {
       return {
-        greeting: `Hello ${input.text}`,
+        greeting: `Hello ${input.text}`
       };
     }),
 

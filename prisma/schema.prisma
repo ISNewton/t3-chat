@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-    provider = "sqlite"
+    provider = "mysql"
     // NOTE: When using postgresql, mysql or sqlserver, uncomment the @db.Text annotations in model Account below
     // Further reading:
     // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
@@ -55,6 +55,12 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
+
+    sentMessages     Message[] @relation("sender")
+    receivedMessages Message[] @relation("receiver")
+
+    firstUserChats  Chat[] @relation("firstUserChat")
+    secondUserChats Chat[] @relation("secondUserChat")
 }
 
 model VerificationToken {
@@ -63,4 +69,25 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model H {
+    id String @id @default(cuid())
+}
+
+model Chat {
+    id           String @id @default(cuid())
+    content      String @db.Text
+    firstUserId  String
+    secondUserId String
+    firstUser    User   @relation(fields: [firstUserId], references: [id], name: "firstUserChat")
+    secondUser   User   @relation(fields: [secondUserId], references: [id], name: "secondUserChat")
+}
+
+model Message {
+    id         String @id @default(cuid())
+    senderId   String
+    receiverId String
+    sender     User   @relation(fields: [senderId], references: [id], name: "sender")
+    receiver   User   @relation(fields: [receiverId], references: [id], name: "receiver")
 }
