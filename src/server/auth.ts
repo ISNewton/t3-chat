@@ -10,6 +10,7 @@ import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
 import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
+import { comparePasswords } from "~/utils/hashHelper";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -58,13 +59,13 @@ export const authOptions: NextAuthOptions = {
         // e.g. domain, username, password, 2FA token, etc.
         // You can pass any HTML attribute to the <input> tag through the object.
         credentials: {
-          email: { label: "Email", type: "email", placeholder: "Email" },
+          username: { label: "username", type: "text", placeholder: "username" },
           password: { label: "Password", type: "password" },
         },
         async authorize(credentials) {
 
           const loginSchema = z.object({
-            email: z.string().email(),
+            username: z.string(),
             password: z.string().min(6),
           });
 
@@ -76,7 +77,7 @@ export const authOptions: NextAuthOptions = {
             return null;
           }
           const user = await prisma.user.findUnique({
-            where: { email: input.email },
+            where: { username: input.username },
           });
 
           if (!user) {
@@ -93,6 +94,7 @@ export const authOptions: NextAuthOptions = {
             id: user.id,
             name: user.name,
             email: user.email,
+            username: user.username,
           };
         },
       }),

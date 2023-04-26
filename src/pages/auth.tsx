@@ -40,6 +40,10 @@ const Auth = () => {
             password: values.password,
         });
 
+        console.log(result);
+        console.log(222);
+        
+
         if (!result?.ok) {
             setError("البريد الالكتروني او كلمة المرور غير صحيحة");
 
@@ -65,9 +69,13 @@ const Auth = () => {
     }) {
         const result = await signIn("credentials", {
             redirect: false,
-            email: values.email,
+            username: values.username,
             password: values.password,
         });
+
+        console.log(result,);
+        console.log(222);
+        
 
         if (!result?.ok) {
             setError("البريد الالكتروني او كلمة المرور غير صحيحة");
@@ -109,7 +117,7 @@ const Auth = () => {
                         <Formik
                             initialValues={initialValues}
                             validationSchema={toFormikValidationSchema(Schema)}
-                            onSubmit={() => alert(343)}
+                            onSubmit={isLogin ? handleSignIn : handleSignUp}
 
 
                         >
