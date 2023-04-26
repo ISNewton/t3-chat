@@ -8,6 +8,8 @@ import DiscordProvider from "next-auth/providers/discord";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { env } from "~/env.mjs";
 import { prisma } from "~/server/db";
+import Credentials from "next-auth/providers/credentials";
+import { z } from "zod";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -47,10 +49,53 @@ export const authOptions: NextAuthOptions = {
   },
   adapter: PrismaAdapter(prisma),
   providers: [
-    DiscordProvider({
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
-    }),
+    Credentials(
+      {
+        // The name to display on the sign in form (e.g. "Sign in with...")
+        name: "Credentials",
+        // The credentials is used to generate a suitable form on the sign in page.
+        // You can specify whatever fields you are expecting to be submitted.
+        // e.g. domain, username, password, 2FA token, etc.
+        // You can pass any HTML attribute to the <input> tag through the object.
+        credentials: {
+          email: { label: "Email", type: "email", placeholder: "Email" },
+          password: { label: "Password", type: "password" },
+        },
+        async authorize(credentials) {
+
+          const loginSchema = z.object({
+            email: z.string().email(),
+            password: z.string().min(6),
+          });
+
+          let input
+
+          try {
+            input = loginSchema.parse(credentials);
+          } catch {
+            return null;
+          }
+          const user = await prisma.user.findUnique({
+            where: { email: input.email },
+          });
+
+          if (!user) {
+            return null;
+          }
+
+          const isValidPassword = comparePasswords(input.password, user.id);
+
+          if (!isValidPassword) {
+            return null;
+          }
+
+          return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+          };
+        },
+      }),
     /**
      * ...add more providers here.
      *
