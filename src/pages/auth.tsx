@@ -40,7 +40,7 @@ const Auth = () => {
     }) {
         const result = await signIn("credentials", {
             redirect: false,
-            email: values.email,
+            username: values.username,
             password: values.password,
         });
 

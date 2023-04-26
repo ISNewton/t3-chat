@@ -64,6 +64,9 @@ export const authOptions: NextAuthOptions = {
         },
         async authorize(credentials) {
 
+          console.log(credentials);
+          
+
           const loginSchema = z.object({
             username: z.string(),
             password: z.string().min(6),
@@ -83,13 +86,13 @@ export const authOptions: NextAuthOptions = {
             },
           });
 
-          console.log(9999)
+          console.log(user)
 
           if (!user) {
             return null;
           }
 
-          const isValidPassword = comparePasswords(input.password, user.id);
+          const isValidPassword = await comparePasswords(input.password, user.password);
 
           if (!isValidPassword) {
             return null;

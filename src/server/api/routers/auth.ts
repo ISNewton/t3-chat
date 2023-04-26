@@ -25,7 +25,14 @@ export const authRouter = createTRPCRouter({
 
       const userExists = await prisma.user.findFirst({
         where: {
-          username: input.username
+          OR: [
+            {
+              username: input.username,
+            },
+            {
+              email: input.email
+            }
+          ]
         },
       })
 
@@ -36,10 +43,6 @@ export const authRouter = createTRPCRouter({
 
       const password = await hash(input.password)
 
-      console.log(121212)
-      console.log(password)
-
-
       const user = await prisma.user.create({
         data: {
           username: input.username,
@@ -47,7 +50,6 @@ export const authRouter = createTRPCRouter({
           password
         }
       })
-      console.log(user);
 
       return {
         id: user.id,
