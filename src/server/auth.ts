@@ -62,10 +62,7 @@ export const authOptions: NextAuthOptions = {
           username: { label: "username", type: "text", placeholder: "username" },
           password: { label: "Password", type: "password" },
         },
-        async authorize(credentials) {
-
-          console.log(credentials);
-          
+        async authorize(credentials) {          
 
           const loginSchema = z.object({
             username: z.string(),
@@ -85,8 +82,6 @@ export const authOptions: NextAuthOptions = {
               username: input.username 
             },
           });
-
-          console.log(user)
 
           if (!user) {
             return null;

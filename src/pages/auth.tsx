@@ -43,11 +43,7 @@ const Auth = () => {
             username: values.username,
             password: values.password,
         });
-
-        console.log(result);
-        console.log(222);
         
-
         if (!result?.ok) {
             setError("البريد الالكتروني او كلمة المرور غير صحيحة");
 
@@ -68,12 +64,15 @@ const Auth = () => {
 
     async function handleSignUp(values: any) {
 
+
         const user = await mutateAsync({
             email : values.email,
             username :values.username,
             password: values.password
         })
-        console.log('user' , user);
+        console.log(3434343)
+
+        console.log('usersodfjsdfjdlfjdlfdlf' , user);
         
         const result = await signIn("credentials", {
             redirect: false,
@@ -81,11 +80,12 @@ const Auth = () => {
             password: values.password,
         });
 
-        console.log('result' , result);
+        // console.log('sdfojdlfjsdlfjsdlkfjdlkfjdlkjflksdflksdjfkld' , result.);
         
 
         if (!result?.ok) {
-            setError("البريد الالكتروني او كلمة المرور غير صحيحة");
+
+            setError(result?.error ?? "البريد الالكتروني او كلمة المرور غير صحيحة");
 
             setTimeout(() => {
                 setError('');
