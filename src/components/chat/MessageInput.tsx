@@ -2,21 +2,29 @@ import { useState } from "react"
 import Button from "../buttons/Button"
 import { api } from "~/utils/api"
 import useStore from "~/store"
+import { useSession } from "next-auth/react"
 
 const MessageInput = () => {
     const [message, setMessage] = useState<string>('')
- 
-    const {appendMessageToSelectedChatMessages , selectedChatMessages} = useStore()
 
-    const { mutateAsync} = api.chat.sendMessage.useMutation()
-    
+    const { data } = useSession()
 
-    function sendMessage(e:any) {
-        if(e.key === 'Enter') {
-                alert(23)
-        }
-        if(!message) {
-            return 
+    const { appendMessageToSelectedChatMessages, selectedChatMessages, selectedChat }
+        = useStore(state => {
+            return {
+                appendMessageToSelectedChatMessages: state.appendMessageToSelectedChatMessages,
+                selectedChatMessages: state.selectedChatMessages,
+                selectedChat: state.selectedChat,
+            }
+        })
+
+    const { mutateAsync } = api.chat.sendMessage.useMutation()
+
+
+    async function sendMessage() {
+
+        if (!message || !selectedChat) {
+            return
         }
 
         //how to append the message to the rest of messages?
@@ -26,11 +34,16 @@ const MessageInput = () => {
 
         setMessage('')
 
-        const result = mutateAsync({
+        const receiverId = data?.user.id == selectedChat.firstUserId
+            ? selectedChat.secondUserId
+            : selectedChat.firstUserId
+
+
+        const result = await mutateAsync({
             content: message,
-            receiverId: 'clgy21lpq00048ztepdoue599'
+            receiverId
         })
-        
+
         console.log(selectedChatMessages)
         console.log(22222)
         console.log(result)

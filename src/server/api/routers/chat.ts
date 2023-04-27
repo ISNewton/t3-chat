@@ -30,13 +30,13 @@ const chatRouter = createTRPCRouter({
     // })
 
     const chats = await prisma.chat.findMany({
-      where:{
+      where: {
         OR: [
           {
-            firstUserId:ctx.session?.user.id
+            firstUserId: ctx.session?.user.id
           },
           {
-            secondUserId:ctx.session?.user.id
+            secondUserId: ctx.session?.user.id
           },
         ]
       }
@@ -48,14 +48,14 @@ const chatRouter = createTRPCRouter({
     console.log(chats);
 
     return chats
-    
+
 
     // return [...<[]>userChats?.firstUserChats, ...<[]>userChats?.secondUserChats] as Chat[]
   }),
   getChatMessages: publicProcedure
     .input(z.string().nullable())
     .query(async ({ input }) => {
-      if(!input) {
+      if (!input) {
         return null
       }
       const messages = await prisma.message.findMany({
@@ -69,6 +69,7 @@ const chatRouter = createTRPCRouter({
     .input(sendMessageInput)
     .mutation(async ({ input, ctx }) => {
       //find user chat
+
       let chat = await prisma.chat.findFirst({
         where: {
           OR: [
@@ -84,9 +85,9 @@ const chatRouter = createTRPCRouter({
         }
       })
 
-      if(!chat) {
-        chat  = await prisma.chat.create({
-          data:{
+      if (!chat) {
+        chat = await prisma.chat.create({
+          data: {
             firstUserId: ctx.session.user.id,
             secondUserId: input.receiverId
           }
@@ -105,7 +106,7 @@ const chatRouter = createTRPCRouter({
         }
       })
 
-      console.log(3434343434,message , chat)
+      console.log(3434343434, message, chat)
     })
 
 });
