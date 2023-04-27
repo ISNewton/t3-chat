@@ -15,7 +15,7 @@ const Layout:React.FC<WithChildren>  = (props) => {
             <div className="container mx-auto shadow-lg rounded-lg">
                 <Header />
 
-                <div className="flex flex-row justify-between bg-white">
+                <div style={{ height:'45rem' }} className="flex flex-row justify-between bg-white">
                     <Sidebar />
 
                     { props.children}

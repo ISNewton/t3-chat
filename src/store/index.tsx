@@ -7,7 +7,7 @@ interface storeState {
 
 
 const useStore = create<storeState>((set) => ({
-    selectedChat: 'sdf',
+    selectedChat: '',
     setSelectedChat: (id) => {
         set((state) => ({ selectedChat: id }))
     },

@@ -90,11 +90,13 @@ model Chat {
 
 model Message {
     id         String @id @default(cuid())
+    content    String @db.Text
+    type       String?
     senderId   String
     receiverId String
     sender     User   @relation(fields: [senderId], references: [id], name: "sender")
     receiver   User   @relation(fields: [receiverId], references: [id], name: "receiver")
 
-    chatId String 
-    chat Chat @relation(fields: [chatId] , references: [id])
+    chatId String
+    chat   Chat   @relation(fields: [chatId], references: [id])
 }
