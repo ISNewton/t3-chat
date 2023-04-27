@@ -5,7 +5,7 @@ import { api } from "~/utils/api"
 export default () => {
 
     const {data} = api.chat.getAllChats.useQuery()
-    // console.log(data,12121122);
+    console.log(data,12121122);
 
     
     

@@ -6,7 +6,7 @@ import { api } from "~/utils/api"
 
 export default () => {
 
-    const { selectedChat  , appendMessageToSelectedChatMessages} = useStore(state => {
+    const { selectedChat, appendMessageToSelectedChatMessages } = useStore(state => {
         return {
             selectedChat: state.selectedChat,
             appendMessageToSelectedChatMessages: state.appendMessageToSelectedChatMessages,
@@ -14,10 +14,8 @@ export default () => {
     })
 
 
+    const {data} = api.chat.getChatMessages.useQuery(selectedChat?.id ?? null)
 
-    const { data } = api.chat.getChatMessages.useQuery(selectedChat)
-
-   
 
     return (
         <div className="w-full px-5 flex flex-col justify-between">

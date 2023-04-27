@@ -14,8 +14,8 @@ export default ({chat}:Props) => {
 
     
     return (
-        <div onClick={() => setSelectedChat(chat.id)}  className={`flex flex-row py-4 px-2 items-center
-         ${selectedChat == chat.id ? 'border-l-4 border-blue-400' : 'border-b-2'}  `}>
+        <div onClick={() => setSelectedChat(chat)}  className={`flex flex-row py-4 px-2 items-center
+         ${selectedChat?.id == chat.id ? 'border-l-4 border-blue-400' : 'border-b-2'}  `}>
                 <div className="w-1/4">
                     <img
                         src="https://source.unsplash.com/otT2199XwI8/600x600"

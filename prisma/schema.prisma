@@ -79,7 +79,6 @@ model H {
 
 model Chat {
     id           String @id @default(cuid())
-    content      String @db.Text
     firstUserId  String
     secondUserId String
     firstUser    User   @relation(fields: [firstUserId], references: [id], name: "firstUserChat")
