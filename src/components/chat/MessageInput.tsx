@@ -1,8 +1,13 @@
 import { useState } from "react"
 import Button from "../buttons/Button"
+import { api } from "~/utils/api"
+import useStore from "~/store"
 
 const MessageInput = () => {
     const [message, setMessage] = useState<string>('')
+ 
+    const {appendMessageToSelectedChatMessages} = useStore()
+    
 
     function sendMessage(e:any) {
         if(e.key === 'Enter') {
@@ -13,6 +18,8 @@ const MessageInput = () => {
         }
 
         //how to append the message to the rest of messages?
+
+        // appendMessageToSelectedChatMessages()
 
         setMessage('')
 

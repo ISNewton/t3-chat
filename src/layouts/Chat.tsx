@@ -6,13 +6,19 @@ import { api } from "~/utils/api"
 
 export default () => {
 
-    const { selectedChat } = useStore()
+    const { selectedChat, appendMessageToSelectedChatMessages } = useStore()
+
+
 
     const { data } = api.chat.getChatMessages.useQuery('clgy21lpq00048ztepdoue599')
-    console.log(data,121212);
+    console.log(data, 121212);
 
-    
-    
+    if (data) {
+        data.map(message => {
+            appendMessageToSelectedChatMessages(message)
+        })
+
+    }
 
     return (
         <div className="w-full px-5 flex flex-col justify-between">
@@ -23,7 +29,7 @@ export default () => {
 
             </div>
             {selectedChat && (
-               <MessageInput />
+                <MessageInput />
             )}
 
         </div>

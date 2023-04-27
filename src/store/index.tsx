@@ -1,10 +1,11 @@
+import { Message } from '@prisma/client'
 import { create } from 'zustand'
 
 interface storeState {
     selectedChat: string,
     setSelectedChat: (id: string) => void
-    selectedChatMessages: string[],
-    appendMessageToSelectedChatMessages: (message: string) => void
+    selectedChatMessages: Message[],
+    appendMessageToSelectedChatMessages: (...message:Message[]) => void
 }
 
 
@@ -14,10 +15,10 @@ const useStore = create<storeState>((set) => ({
         set((state) => ({ selectedChat: id }))
     },
     selectedChatMessages: [],
-    appendMessageToSelectedChatMessages(message: string) {
+    appendMessageToSelectedChatMessages(...message:Message[]) {
         set(state => {
             return {
-                selectedChatMessages: [...state.selectedChatMessages  , message]
+                selectedChatMessages: [...state.selectedChatMessages  , ...message]
             }
         })
 
