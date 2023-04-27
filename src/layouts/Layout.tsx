@@ -7,9 +7,6 @@ interface WithChildren {
 }
 
 const Layout:React.FC<WithChildren>  = (props) => {
-    console.log(43);
-    console.log(props.children);
-
     return (
         <>
             <div className="container mx-auto shadow-lg rounded-lg">

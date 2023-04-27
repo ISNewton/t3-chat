@@ -19,7 +19,7 @@ export default () => {
                 />
             </div>
             {data?.map(chat => (
-            <ChatItem key={chat} chat={chat} />
+            <ChatItem key={chat.id} chat={chat} />
             ))}
         </div>
     )

@@ -6,25 +6,24 @@ import { api } from "~/utils/api"
 
 export default () => {
 
-    const { selectedChat, appendMessageToSelectedChatMessages } = useStore()
+    const { selectedChat  , appendMessageToSelectedChatMessages} = useStore(state => {
+        return {
+            selectedChat: state.selectedChat,
+            appendMessageToSelectedChatMessages: state.appendMessageToSelectedChatMessages,
+        }
+    })
 
 
 
-    const { data } = api.chat.getChatMessages.useQuery('clgy21lpq00048ztepdoue599')
-    console.log(data, 121212);
+    const { data } = api.chat.getChatMessages.useQuery(selectedChat)
 
-    if (data) {
-        data.map(message => {
-            appendMessageToSelectedChatMessages(message.content)
-        })
-
-    }
+   
 
     return (
         <div className="w-full px-5 flex flex-col justify-between">
             <div className="flex flex-col mt-5">
                 {data?.map(message => (
-                    <Message messageType="received" message={message} />
+                    <Message key={message.id} messageType="received" message={message} />
                 ))}
 
             </div>

@@ -1,4 +1,5 @@
 
+import { Chat } from "@prisma/client";
 import { z } from "zod";
 import {
   createTRPCRouter,
@@ -26,7 +27,10 @@ const chatRouter = createTRPCRouter({
       }
     })
 
-    return [...<[]>userChats?.firstUserChats, ...<[]>userChats?.secondUserChats]
+    console.log(userChats);
+    
+
+    return [...<[]>userChats?.firstUserChats, ...<[]>userChats?.secondUserChats] as Chat[]
   }),
   getChatMessages: publicProcedure
     .input(z.string())

@@ -16,9 +16,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   const result = await getSession(context)
 
-  console.log(result);
-
-
   if (!result) {
       return {
           redirect: {
