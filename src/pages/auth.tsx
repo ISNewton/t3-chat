@@ -1,5 +1,6 @@
 import { Form, Formik } from "formik"
-import { signIn } from "next-auth/react"
+import { GetServerSideProps, GetServerSidePropsContext } from "next"
+import { getSession, signIn } from "next-auth/react"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { z } from "zod"
@@ -209,5 +210,26 @@ const Auth = () => {
 }
 
 Auth.getLayout = (page: any) => page
+
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+
+    const result = await getSession(context)
+
+    console.log(result);
+
+
+    if (result) {
+        return {
+            redirect: {
+                destination: "/",
+            },
+        }
+    }
+    return {
+        props: {
+        },
+    };
+}
 
 export default Auth

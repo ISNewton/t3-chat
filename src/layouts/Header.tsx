@@ -1,7 +1,16 @@
+import { useSession } from "next-auth/react"
+
 export default () => {
+    const session = useSession()
+
+    console.log(session);
+    
+    
+
     return (
         <div className="px-5 py-5 flex justify-between items-center bg-white border-b-2">
-            <div className="font-semibold text-2xl">GoingChat</div>
+            <div className="font-semibold text-2xl">GoingChat , {session.data?.user.id}</div>
+        
             <div className="w-1/2">
                 <input
                     type="text"

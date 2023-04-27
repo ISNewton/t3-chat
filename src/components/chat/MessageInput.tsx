@@ -8,7 +8,7 @@ const MessageInput = () => {
  
     const {appendMessageToSelectedChatMessages , selectedChatMessages} = useStore()
 
-    
+    const { mutateAsync} = api.chat.sendMessage.useMutation()
     
 
     function sendMessage(e:any) {
@@ -25,8 +25,15 @@ const MessageInput = () => {
 
 
         setMessage('')
+
+        const result = mutateAsync({
+            content: message,
+            receiverId: 'clgy21lpq00048ztepdoue599'
+        })
         
         console.log(selectedChatMessages)
+        console.log(22222)
+        console.log(result)
 
     }
     return (
