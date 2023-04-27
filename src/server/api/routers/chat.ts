@@ -38,7 +38,7 @@ const chatRouter = createTRPCRouter({
       })
       return messages
     }),
-  sendMessage: publicProcedure
+  sendMessage: protectedProcedure
     .input(sendMessageInput)
     .mutation(async ({ input, ctx }) => {
       //find user chat
@@ -61,11 +61,8 @@ const chatRouter = createTRPCRouter({
         chat  = await prisma.chat.create({
           data:{
             content: 'chatsjdhsdksjdksjdksdj',
-            firstUserId: ctx.session?.user.id,
+            firstUserId: ctx.session.user.id,
             secondUserId: input.receiverId,
-          },
-          select: {
-            id: true
           }
         })
       }
