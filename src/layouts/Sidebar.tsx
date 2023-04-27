@@ -1,10 +1,13 @@
 import ChatItem from "~/components/chat/ChatItem"
+import useStore from "~/store"
 import { api } from "~/utils/api"
 
 export default () => {
 
     const {data} = api.chat.getAllChats.useQuery()
     // console.log(data,12121122);
+
+    
     
     return (
         <div className="flex flex-col w-2/5 border-r-2 overflow-y-auto">

@@ -1,12 +1,17 @@
 import { Chat } from "@prisma/client";
+import useStore from "~/store";
 
 interface Props {
     chat:Chat
 }
 export default (props:Props) => {
+
+    const {selectedChat , setSelectedChat} = useStore()
+
     
     return (
-        <div className="flex flex-row py-4 px-2 items-center border-b-2">
+        <div onClick={() => setSelectedChat(props.chat.id)}  className={`flex flex-row py-4 px-2 items-center
+         ${selectedChat == props.chat.id ? 'border-l-4 border-blue-400' : 'border-b-2'}  `}>
                 <div className="w-1/4">
                     <img
                         src="https://source.unsplash.com/otT2199XwI8/600x600"
