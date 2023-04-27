@@ -4,8 +4,8 @@ import { create } from 'zustand'
 interface storeState {
     selectedChat: string,
     setSelectedChat: (id: string) => void
-    selectedChatMessages: Message[],
-    appendMessageToSelectedChatMessages: (...message:Message[]) => void
+    selectedChatMessages: string[],
+    appendMessageToSelectedChatMessages: (...message:string[]) => void
 }
 
 
@@ -15,7 +15,7 @@ const useStore = create<storeState>((set) => ({
         set((state) => ({ selectedChat: id }))
     },
     selectedChatMessages: [],
-    appendMessageToSelectedChatMessages(...message:Message[]) {
+    appendMessageToSelectedChatMessages(...message:string[]) {
         set(state => {
             return {
                 selectedChatMessages: [...state.selectedChatMessages  , ...message]

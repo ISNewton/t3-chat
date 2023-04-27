@@ -1,7 +1,5 @@
-import { TRPCClientError } from "@trpc/client";
-import { TRPCError } from "@trpc/server";
-import { z } from "zod";
 
+import { z } from "zod";
 import {
   createTRPCRouter,
   publicProcedure,
@@ -10,9 +8,13 @@ import {
 import { prisma } from "~/server/db";
 import { hash } from "~/utils/hashHelper";
 
+const sendMessageInput = z.object({
+  content: z.string(),
+  receiverId: z.string()
+})
 
 const chatRouter = createTRPCRouter({
-  getAllChats: publicProcedure.query(async({ input, ctx }) => {
+  getAllChats: publicProcedure.query(async ({ input, ctx }) => {
 
     const userChats = await prisma.user.findFirst({
       where: {
@@ -22,24 +24,67 @@ const chatRouter = createTRPCRouter({
         firstUserChats: true,
         secondUserChats: true
       }
-    })    
-
-    return [...<[]>userChats?.firstUserChats , ...<[]>userChats?.secondUserChats]
-  }),
-  getChatMessages: publicProcedure
-  .input(z.string())
-  .query(async ({input}) => {
-    const messages = await prisma.message.findMany({
-      where: {
-        chatId: input
-      }
     })
 
-    console.log(44444444)
-    console.log(messages)
-    return messages
-  })
-  
+    return [...<[]>userChats?.firstUserChats, ...<[]>userChats?.secondUserChats]
+  }),
+  getChatMessages: publicProcedure
+    .input(z.string())
+    .query(async ({ input }) => {
+      const messages = await prisma.message.findMany({
+        where: {
+          chatId: input
+        }
+      })
+      return messages
+    }),
+  sendMessage: publicProcedure
+    .input(sendMessageInput)
+    .mutation(async ({ input, ctx }) => {
+      //find user chat
+      let chat = await prisma.chat.findFirst({
+        where: {
+          OR: [
+            {
+              firstUserId: input.receiverId,
+              secondUserId: ctx.session?.user.id
+            },
+            {
+              firstUserId: ctx.session?.user.id,
+              secondUserId: input.receiverId
+            }
+          ]
+        }
+      })
+
+      if(!chat) {
+        chat  = await prisma.chat.create({
+          data:{
+            content: 'chatsjdhsdksjdksjdksdj',
+            firstUserId: ctx.session?.user.id,
+            secondUserId: input.receiverId,
+          },
+          select: {
+            id: true
+          }
+        })
+      }
+
+
+
+
+      const message = await prisma.message.create({
+        data: {
+          content: input.content,
+          receiverId: input.receiverId,
+          chatId: chat.id,
+          senderId: ctx.session?.user.id
+        }
+      })
+
+      console.log(3434343434,message , chat)
+    })
+
 });
 
 export default chatRouter

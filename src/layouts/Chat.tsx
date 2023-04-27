@@ -15,7 +15,7 @@ export default () => {
 
     if (data) {
         data.map(message => {
-            appendMessageToSelectedChatMessages(message)
+            appendMessageToSelectedChatMessages(message.content)
         })
 
     }

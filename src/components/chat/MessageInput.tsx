@@ -6,7 +6,9 @@ import useStore from "~/store"
 const MessageInput = () => {
     const [message, setMessage] = useState<string>('')
  
-    const {appendMessageToSelectedChatMessages} = useStore()
+    const {appendMessageToSelectedChatMessages , selectedChatMessages} = useStore()
+
+    
     
 
     function sendMessage(e:any) {
@@ -19,9 +21,12 @@ const MessageInput = () => {
 
         //how to append the message to the rest of messages?
 
-        // appendMessageToSelectedChatMessages()
+        appendMessageToSelectedChatMessages(message)
+
 
         setMessage('')
+        
+        console.log(selectedChatMessages)
 
     }
     return (
