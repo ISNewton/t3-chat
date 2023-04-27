@@ -3,6 +3,20 @@ import Button from "../buttons/Button"
 
 const MessageInput = () => {
     const [message, setMessage] = useState<string>('')
+
+    function sendMessage(e:any) {
+        if(e.key === 'Enter') {
+                alert(23)
+        }
+        if(!message) {
+            return 
+        }
+
+        //how to append the message to the rest of messages?
+
+        setMessage('')
+
+    }
     return (
         <div className="py-5">
             <div className="grid grid-cols-10 gap-2 items-center">
@@ -13,7 +27,7 @@ const MessageInput = () => {
                     type="text"
                     placeholder="type your message here..."
                 />
-                <Button>
+                <Button onKeyUp={sendMessage} onClick={sendMessage} disabled={!message}>
                     Send
                 </Button>
             </div>

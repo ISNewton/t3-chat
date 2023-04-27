@@ -9,7 +9,9 @@ export default () => {
     const { selectedChat } = useStore()
 
     const { data } = api.chat.getChatMessages.useQuery('clgy21lpq00048ztepdoue599')
-    console.log(selectedChat,121212);
+    console.log(data,121212);
+
+    
     
 
     return (
