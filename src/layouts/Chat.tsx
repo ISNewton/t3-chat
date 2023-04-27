@@ -1,5 +1,6 @@
 import { useEffect } from "react"
 import Message from "~/components/chat/Message"
+import MessageInput from "~/components/chat/MessageInput"
 import useStore from "~/store"
 import { api } from "~/utils/api"
 
@@ -20,13 +21,7 @@ export default () => {
 
             </div>
             {selectedChat && (
-                <div className="py-5">
-                    <input
-                        className="w-full bg-gray-300 py-5 px-3 rounded-xl"
-                        type="text"
-                        placeholder="type your message here..."
-                    />
-                </div>
+               <MessageInput />
             )}
 
         </div>
