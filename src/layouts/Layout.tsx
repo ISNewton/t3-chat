@@ -1,7 +1,15 @@
+import { ReactNode } from "react";
 import Header from "./Header"
 import Sidebar from "./Sidebar"
 
-export default ({children}:any) => {
+interface WithChildren {
+    children: React.ReactNode;
+}
+
+const Layout:React.FC<WithChildren>  = (props) => {
+    console.log(43);
+    console.log(props.children);
+
     return (
         <>
             <div className="container mx-auto shadow-lg rounded-lg">
@@ -10,7 +18,7 @@ export default ({children}:any) => {
                 <div className="flex flex-row justify-between bg-white">
                     <Sidebar />
 
-                    {children}
+                    { props.children}
 
                 </div>
             </div>
@@ -18,3 +26,5 @@ export default ({children}:any) => {
 
     )
 }
+
+export default Layout

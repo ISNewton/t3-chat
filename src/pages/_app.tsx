@@ -19,7 +19,7 @@ type AppPropsWithLayout = AppProps & {
 }
 
 const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
-  const getLayout = Component.getLayout || ((page) => <Layout />)
+  const getLayout = Component.getLayout || ((page) => <Layout children={page} />)
 
   return (
     <SessionProvider session={pageProps.session}>

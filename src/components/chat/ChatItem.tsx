@@ -4,8 +4,6 @@ interface Props {
     chat:Chat
 }
 export default (props:Props) => {
-    console.log(3);
-    console.log(props);
     
     return (
         <div className="flex flex-row py-4 px-2 items-center border-b-2">
