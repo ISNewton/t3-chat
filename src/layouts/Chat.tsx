@@ -1,6 +1,13 @@
+import { useEffect } from "react"
 import Message from "~/components/chat/Message"
+import useStore from "~/store"
 
 export default () => {
+
+    const {selectedChat} = useStore()
+
+    
+
     return (
         <div className="w-full px-5 flex flex-col justify-between">
             <div className="flex flex-col mt-5">

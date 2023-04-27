@@ -84,6 +84,8 @@ model Chat {
     secondUserId String
     firstUser    User   @relation(fields: [firstUserId], references: [id], name: "firstUserChat")
     secondUser   User   @relation(fields: [secondUserId], references: [id], name: "secondUserChat")
+
+    messages Message[]
 }
 
 model Message {
@@ -92,4 +94,7 @@ model Message {
     receiverId String
     sender     User   @relation(fields: [senderId], references: [id], name: "sender")
     receiver   User   @relation(fields: [receiverId], references: [id], name: "receiver")
+
+    chatId String 
+    chat Chat @relation(fields: [chatId] , references: [id])
 }

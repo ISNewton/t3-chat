@@ -25,7 +25,20 @@ const chatRouter = createTRPCRouter({
     })    
 
     return [...<[]>userChats?.firstUserChats , ...<[]>userChats?.secondUserChats]
+  }),
+  getChatMessages: publicProcedure
+  .input(z.string())
+  .query(async ({input}) => {
+    const messages = await prisma.message.findMany({
+      where: {
+        chatId: input
+      }
+    })
+
+    console.log(44444444)
+    console.log(messages)
   })
+  
 });
 
 export default chatRouter
