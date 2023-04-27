@@ -11,6 +11,7 @@ import { prisma } from "~/server/db";
 import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
 import { comparePasswords } from "~/utils/hashHelper";
+import { User } from "@prisma/client";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -40,14 +41,25 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+    async session({ session, token }) {
+
+      if (token.user) {
+        session.user = token.user as User;
+      }
+      return session;
+    },
+    async jwt({ token, user }) {
+      if (user) token.user = user;
+      return token;
+    },
   },
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+    updateAge: 24 * 60 * 60, // 24 hours,
+
+  },
+  secret: process.env.NEXTAUTH_SECRET,
   adapter: PrismaAdapter(prisma),
   providers: [
     Credentials(
@@ -62,7 +74,7 @@ export const authOptions: NextAuthOptions = {
           username: { label: "username", type: "text", placeholder: "username" },
           password: { label: "Password", type: "password" },
         },
-        async authorize(credentials) {          
+        async authorize(credentials) {
 
           const loginSchema = z.object({
             username: z.string(),
@@ -78,8 +90,8 @@ export const authOptions: NextAuthOptions = {
           }
           console.log(45545)
           const user = await prisma.user.findFirst({
-            where: { 
-              username: input.username 
+            where: {
+              username: input.username
             },
           });
 
@@ -100,7 +112,10 @@ export const authOptions: NextAuthOptions = {
             username: user.username,
           };
         },
-      }),
+
+      },),
+
+
     /**
      * ...add more providers here.
      *

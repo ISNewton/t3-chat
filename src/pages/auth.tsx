@@ -1,6 +1,6 @@
 import { Form, Formik } from "formik"
 import { GetServerSideProps, GetServerSidePropsContext } from "next"
-import { getSession, signIn } from "next-auth/react"
+import { getSession, signIn, useSession } from "next-auth/react"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { z } from "zod"
@@ -18,6 +18,8 @@ const Auth = () => {
     const [error, setError] = useState<String>('')
 
     const { mutateAsync } = api.auth.signUp.useMutation()
+
+    const session = useSession()
 
 
     const { replace } = useRouter()
@@ -44,6 +46,10 @@ const Auth = () => {
             username: values.username,
             password: values.password,
         });
+
+        console.log('result ' , result);
+        console.log('session ' , session);
+        
         
         if (!result?.ok) {
             setError("البريد الالكتروني او كلمة المرور غير صحيحة");
@@ -56,7 +62,7 @@ const Auth = () => {
             // toast.success('Welcome back !', {
             //     theme: "colored",
             // })
-            replace("/")
+            // replace("/")
 
         }
 

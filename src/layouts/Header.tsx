@@ -1,10 +1,7 @@
 import { useSession } from "next-auth/react"
 
 export default () => {
-    const session = useSession()
-
-    console.log(session);
-    
+    const session = useSession()    
     
 
     return (

@@ -19,7 +19,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   console.log(result);
 
 
-  if (result) {
+  if (!result) {
       return {
           redirect: {
               destination: "/auth",
