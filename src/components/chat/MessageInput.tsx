@@ -9,16 +9,22 @@ const MessageInput = () => {
 
     const { data } = useSession()
 
-    const { appendMessageToSelectedChatMessages, selectedChatMessages, selectedChat }
+    const query = api.useContext()
+
+    const { selectedChat }
         = useStore(state => {
             return {
-                appendMessageToSelectedChatMessages: state.appendMessageToSelectedChatMessages,
-                selectedChatMessages: state.selectedChatMessages,
                 selectedChat: state.selectedChat,
             }
         })
 
-    const { mutateAsync } = api.chat.sendMessage.useMutation()
+    const { mutateAsync } = api.chat.sendMessage.useMutation(({
+        async onSuccess(input) {
+            await query.chat.getChatMessages.invalidate()
+
+
+        }
+    }))
 
 
     async function sendMessage() {
@@ -27,11 +33,6 @@ const MessageInput = () => {
             return
         }
 
-        //how to append the message to the rest of messages?
-
-        appendMessageToSelectedChatMessages(message)
-
-
         setMessage('')
 
         const receiverId = data?.user.id == selectedChat.firstUserId
@@ -39,15 +40,10 @@ const MessageInput = () => {
             : selectedChat.firstUserId
 
 
-        const result = await mutateAsync({
+        mutateAsync({
             content: message,
             receiverId
         })
-
-        console.log(selectedChatMessages)
-        console.log(22222)
-        console.log(result)
-
     }
     return (
         <div className="py-5">

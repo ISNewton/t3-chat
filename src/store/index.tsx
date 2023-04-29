@@ -5,7 +5,7 @@ interface storeState {
     selectedChat: Chat | null,
     setSelectedChat: (chat : Chat) => void
     selectedChatMessages: string[],
-    appendMessageToSelectedChatMessages: (...message:string[]) => void
+    appendMessageToSelectedChatMessages: (message:string[] | []) => void
 }
 
 
@@ -15,10 +15,11 @@ const useStore = create<storeState>((set) => ({
         set((state) => ({ selectedChat: chat }))
     },
     selectedChatMessages: [],
-    appendMessageToSelectedChatMessages(...message:string[]) {
+    appendMessageToSelectedChatMessages(message:string[] | []) {
+        
         set(state => {
             return {
-                selectedChatMessages: [...state.selectedChatMessages  , ...message]
+                selectedChatMessages: [ ...(message as []) ]
             }
         })
 

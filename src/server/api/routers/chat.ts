@@ -1,5 +1,5 @@
 
-import { Chat } from "@prisma/client";
+import { Chat, Message } from "@prisma/client";
 import { z } from "zod";
 import {
   createTRPCRouter,
@@ -13,6 +13,11 @@ const sendMessageInput = z.object({
   content: z.string(),
   receiverId: z.string()
 })
+
+const getChatMessagesInput = z.object({
+  chatId: z.string()
+})
+
 
 const chatRouter = createTRPCRouter({
   getAllChats: publicProcedure.query(async ({ input, ctx }) => {
@@ -53,16 +58,20 @@ const chatRouter = createTRPCRouter({
     // return [...<[]>userChats?.firstUserChats, ...<[]>userChats?.secondUserChats] as Chat[]
   }),
   getChatMessages: publicProcedure
-    .input(z.string().nullable())
+    .input(getChatMessagesInput)
     .query(async ({ input }) => {
-      if (!input) {
-        return null
-      }
+
+      
+
       const messages = await prisma.message.findMany({
         where: {
-          chatId: input
+          chatId: input.chatId
         }
       })
+      console.log('logging getChatMessages');
+      console.log(messages);
+      console.log('logging getChatMessages');
+
       return messages
     }),
   sendMessage: protectedProcedure

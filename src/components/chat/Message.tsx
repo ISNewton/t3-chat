@@ -1,8 +1,7 @@
-import { Message } from "@prisma/client"
 
 interface PropsTypes {
     messageType: 'sent' | 'received',
-    message : Message
+    message : string
 
 }
 
@@ -19,7 +18,7 @@ const Message = ({message , messageType}: PropsTypes) => {
             }
                     `}
                 >
-                    {message.content}
+                    {message}
                 </div>
                 <img
                     src="https://source.unsplash.com/vpOeXr5wmR4/600x600"
