@@ -46,10 +46,6 @@ const Auth = () => {
             username: values.username,
             password: values.password,
         });
-
-        console.log('result ' , result);
-        console.log('session ' , session);
-        
         
         if (!result?.ok) {
             setError("البريد الالكتروني او كلمة المرور غير صحيحة");
@@ -221,9 +217,6 @@ Auth.getLayout = (page: any) => page
 export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     const result = await getSession(context)
-
-    console.log(result);
-
 
     if (result) {
         return {
