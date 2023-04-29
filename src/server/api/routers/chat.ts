@@ -21,18 +21,6 @@ const getChatMessagesInput = z.object({
 
 const chatRouter = createTRPCRouter({
   getAllChats: publicProcedure.query(async ({ input, ctx }) => {
-    console.log(23232);
-
-
-    // const userChats = await prisma.user.findFirst({
-    //   where: {
-    //     id: ctx.session?.user.id
-    //   },
-    //   select: {
-    //     firstUserChats: true,
-    //     secondUserChats: true
-    //   }
-    // })
 
     const chats = await prisma.chat.findMany({
       where: {
@@ -44,6 +32,10 @@ const chatRouter = createTRPCRouter({
             secondUserId: ctx.session?.user.id
           },
         ]
+      },
+      include: {
+        firstUser: true,
+        secondUser: true,
       }
     })
 
