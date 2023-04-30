@@ -15,11 +15,14 @@ import { hash } from "~/utils/hashHelper";
 export const usersRouter = createTRPCRouter({
     search: protectedProcedure
         .input(z.string())
-        .query(async ({ input }) => {
+        .query(async ({ input , ctx }) => {
             const users = await prisma.user.findMany({
                 where: {
                     username: {
-                        contains: input
+                        contains: input,
+                    },
+                    id: {
+                        not: ctx.session.user.id
                     }
                 }
             })
