@@ -36,24 +36,18 @@ const chatRouter = createTRPCRouter({
       include: {
         firstUser: true,
         secondUser: true,
+        messages: {
+          take: 1,
+          orderBy: {
+          }
+        }
       }
     })
-
-
-    // console.log(userChats);
-    console.log(11111);
-    console.log(chats);
-
     return chats
-
-
-    // return [...<[]>userChats?.firstUserChats, ...<[]>userChats?.secondUserChats] as Chat[]
   }),
   getChatMessages: publicProcedure
     .input(getChatMessagesInput)
     .query(async ({ input }) => {
-
-
 
       const messages = await prisma.message.findMany({
         where: {

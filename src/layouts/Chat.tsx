@@ -5,18 +5,14 @@ import MessageInput from "~/components/chat/MessageInput"
 import useStore from "~/store"
 export default () => {
 
-    const { selectedChat } = useStore(state => {
-        return {
-            selectedChat: state.selectedChat,
-        }
-    })
+    const selectedChat = useStore(state => state.selectedChat)
 
 
 
 
     return (
         <div className="w-full px-5 flex flex-col justify-between">
-            {selectedChat?.id && <ChatContainer selectedChat={selectedChat}  />}
+            {selectedChat?.id && <ChatContainer selectedChat={selectedChat} />}
             {selectedChat && (
                 <MessageInput />
             )}

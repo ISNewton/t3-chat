@@ -1,10 +1,25 @@
+import { Chat, User } from "@prisma/client"
+import { useSession } from "next-auth/react"
 import { useEffect, useState } from "react"
+import useStore from "~/store"
 import { api } from "~/utils/api"
 
 const UsersSearch = () => {
     const [search, setSearch] = useState<string>('')
+    const setSelectedChat = useStore(store => store.setSelectedChat)
+    const session = useSession()
 
-    const { data, isLoading } = api.users.search.useQuery(search)
+    const { data, isLoading ,  } = api.users.search.useQuery(search)
+
+    function openChat(user:User) {
+        const chat  = {
+            firstUserId : session.data?.user.id,
+            secondUserId : user.id,
+            id: 'a'
+        } as Chat
+        setSelectedChat(chat)
+        setSearch('')
+    }
     return (
 
         <div className="w-1/2">
@@ -20,7 +35,7 @@ const UsersSearch = () => {
             {data && search && (
                 <div className="absolute z-10 w-1/4 border divide-y shadow max-h-72 overflow-y-auto bg-white">
                     {data.map(user => (
-                        <div className="block p-2 hover:bg-indigo-50 cursor-pointer">{user.username}</div>
+                        <div onClick={() => openChat(user)} className="block p-2 hover:bg-indigo-50 cursor-pointer">{user.username}</div>
                     ))}
                 </div>
 
