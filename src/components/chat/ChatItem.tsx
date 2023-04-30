@@ -1,12 +1,16 @@
-import { Chat, User } from "@prisma/client";
+import { Chat, Message, User } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import useStore from "~/store";
 
 interface Props {
-    chat: Chat & { firstUser: User, secondUser: User }
+    chat: Chat & { firstUser: User, secondUser: User , messages:Message[] }
+    // chat: any
 }
 export default ({ chat }: Props) => {
+
+    console.log(chat);
+    
 
     const { selectedChat, setSelectedChat } = useStore()
 
@@ -41,7 +45,7 @@ export default ({ chat }: Props) => {
                 <div className="text-lg font-semibold">
                     {receiverUser.username}
                 </div>
-                <span className="text-gray-500">Hi Sam, Welcome</span>
+                <span className="text-gray-500">{chat.messages[0]?.content}</span>
             </div>
         </div>
     )

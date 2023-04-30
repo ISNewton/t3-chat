@@ -6,7 +6,6 @@ export default () => {
 
     const {data , isSuccess} = api.chat.getAllChats.useQuery()
 
-    
 
     if(!isSuccess) {
         return <p>No chats</p>

@@ -39,10 +39,13 @@ const chatRouter = createTRPCRouter({
         messages: {
           take: 1,
           orderBy: {
+            createdAt: 'desc',
           }
         }
       }
     })
+    console.log(chats[0] , 'cats');
+    
     return chats
   }),
   getChatMessages: publicProcedure
