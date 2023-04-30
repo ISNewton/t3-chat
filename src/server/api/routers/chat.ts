@@ -53,7 +53,7 @@ const chatRouter = createTRPCRouter({
     .input(getChatMessagesInput)
     .query(async ({ input }) => {
 
-      
+
 
       const messages = await prisma.message.findMany({
         where: {
