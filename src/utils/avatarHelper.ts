@@ -4,6 +4,7 @@ import { v4 as uuid4 } from "uuid";
 
 import sharp from "sharp";
 import { TRPCError } from "@trpc/server";
+import { User } from "@prisma/client";
 
 export function uploadAvatar(file:string):string {
     const dir = 'public/avatars/';
@@ -33,4 +34,9 @@ export function uploadAvatar(file:string):string {
       });
     }
 
+}
+
+export function getAvatarText(user:User) {
+  return 'ss';
+  return `public/avatars/${user.image}`
 }

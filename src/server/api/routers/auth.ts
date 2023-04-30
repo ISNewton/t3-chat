@@ -8,8 +8,8 @@ import {
   protectedProcedure,
 } from "~/server/api/trpc";
 import { prisma } from "~/server/db";
+import { uploadAvatar } from "~/utils/avatarHelper";
 import { hash } from "~/utils/hashHelper";
-import { uploadAvatar } from "~/utils/uplaodHelper";
 
 
 export const authRouter = createTRPCRouter({
