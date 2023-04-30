@@ -59,7 +59,7 @@ model User {
     sessions      Session[]
 
     createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt()
+    updatedAt DateTime @default(now()) @updatedAt @db.DateTime(6)
 
     sentMessages     Message[] @relation("sender")
     receivedMessages Message[] @relation("receiver")
@@ -84,7 +84,8 @@ model Chat {
     secondUser   User   @relation(fields: [secondUserId], references: [id], name: "secondUserChat")
 
     createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt()
+    updatedAt DateTime @default(now()) @updatedAt @db.DateTime(6)
+
 
     messages Message[]
 }
@@ -99,7 +100,9 @@ model Message {
     receiver   User    @relation(fields: [receiverId], references: [id], name: "receiver")
 
     createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt()
+    updatedAt DateTime @default(now()) @updatedAt @db.DateTime(6)
+
+
 
     chatId String
     chat   Chat   @relation(fields: [chatId], references: [id])

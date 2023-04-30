@@ -27,7 +27,12 @@ export const authRouter = createTRPCRouter({
 
       const base64 = input.avatar.split(";base64,").pop();
 
+      console.log(base64);
+      
+
       if (!base64) {
+        console.log(22222222222);
+        
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Something went wrong",

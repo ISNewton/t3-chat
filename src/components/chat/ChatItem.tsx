@@ -24,7 +24,7 @@ export default ({ chat }: Props) => {
                     <Image
                         width='48'
                         height='48'
-                        src={`public/avatars/${receiverUser.image}`}
+                        src={`/avatars/${receiverUser.image}`}
                         className="object-cover h-12 w-12 rounded-full"
                         alt="avatar"
                     />
