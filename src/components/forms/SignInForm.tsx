@@ -18,7 +18,8 @@ const SignInForm = ({ isLogin }: FormProps) => {
 
     const [error, setError] = useState<String>('')
 
-    const [file, setFile] = useState<File | null>(null)
+    const [file, setFile] = useState<File | null>()
+    const [stringFile, setStringFile] = useState<string>('')
 
     const { mutateAsync } = api.auth.signUp.useMutation()
 
@@ -36,16 +37,6 @@ const SignInForm = ({ isLogin }: FormProps) => {
         email: isLogin ? z.optional(z.string().email()) : z.string().email(),
         username: z.string().min(5),
         password: z.string().min(8),
-        // avatar: z.any()
-        //     .refine(
-        //         (file) => {
-        //             console.log(file);   
-        //             // return true                 
-        //             return ["image/jpeg", "image/jpg", "image/png", "image/webp"].includes(file?.[0]?.type)
-
-        //         },
-        //         "Only .jpg, .jpeg, .png and .webp formats are supported."
-        //     )
     });
 
 
@@ -82,17 +73,24 @@ const SignInForm = ({ isLogin }: FormProps) => {
 
 
 
-        if(!file) {
+        if (!file) {
             return
         }
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            setStringFile(reader.result as string)
+        }
+
+
+
         const user = await mutateAsync({
             email: values.email,
             username: values.username,
             password: values.password,
-            avatar: file
+            avatar: stringFile
         })
 
-        return 
 
 
         const result = await signIn("credentials", {
@@ -180,8 +178,8 @@ const SignInForm = ({ isLogin }: FormProps) => {
                                             console.log(e.currentTarget.files)
                                             if (e.currentTarget?.files && e.currentTarget?.files[0]) {
                                                 setFile(e.currentTarget.files[0])
-
                                             }
+
                                         }}
                                         id='avatar'
                                         name="avatar"

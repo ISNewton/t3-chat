@@ -9,6 +9,7 @@ import {
 } from "~/server/api/trpc";
 import { prisma } from "~/server/db";
 import { hash } from "~/utils/hashHelper";
+import { uploadAvatar } from "~/utils/uplaodHelper";
 
 
 export const authRouter = createTRPCRouter({
@@ -17,19 +18,23 @@ export const authRouter = createTRPCRouter({
       username: z.string(),
       email: z.string().email(),
       password: z.string(),
-      avatar: z.any((file:any) => {
-        console.log(file);
-        return true
-        
-      })
+      avatar: z.string()
     }))
 
     .mutation(async ({ input }) => {
 
-      console.log(input);
-      return
-      
+      const uploadPath = 'upload/path'
 
+      const base64 = input.avatar.split(";base64,").pop();
+
+      if (!base64) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Something went wrong",
+        })
+      }
+
+      const avatar = uploadAvatar(base64)
 
 
       const userExists = await prisma.user.findFirst({
@@ -56,7 +61,8 @@ export const authRouter = createTRPCRouter({
         data: {
           username: input.username,
           email: input.email,
-          password
+          password,
+          image: avatar
         }
       })
 
