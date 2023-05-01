@@ -15,8 +15,11 @@ const sendMessageInput = z.object({
 })
 
 const getChatMessagesInput = z.object({
-  chatId: z.string()
-})
+  chatId: z.string().optional(),
+  receiverId: z.string().optional(),
+}).refine(data => data.chatId || data.receiverId, {
+  message: "Either chatId or receiverId is required",
+});
 
 
 const chatRouter = createTRPCRouter({
@@ -44,19 +47,41 @@ const chatRouter = createTRPCRouter({
         }
       }
     })
-    
+
     return chats
   }),
-  getChatMessages: publicProcedure
+  getChatMessages: protectedProcedure
     .input(getChatMessagesInput)
-    .query(async ({ input }) => {
+    .query(async ({ input, ctx }) => {
 
-      const messages = await prisma.message.findMany({
-        where: {
-          chatId: input.chatId
-        }
-      })
+      let messages
 
+      if (input.chatId) {
+        messages = await prisma.message.findMany({
+          where: {
+            chatId: input.chatId
+          }
+        })
+      } else if(input.receiverId) {
+        messages = await prisma.message.findMany({
+          where: {
+            OR: [
+              {
+                senderId: input.receiverId,
+                receiverId: ctx.session?.user.id
+              },
+              {
+                senderId: ctx.session?.user.id,
+                receiverId: input.receiverId
+              }
+            ]
+          }
+        })
+      }
+      else {
+        console.log(33333333333333);
+        
+      }
       return messages
     }),
   sendMessage: protectedProcedure

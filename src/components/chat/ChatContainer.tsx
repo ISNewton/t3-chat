@@ -3,6 +3,7 @@ import { api } from "~/utils/api"
 import Message from "./Message"
 import { Chat } from "@prisma/client"
 import { useEffect, useState } from "react"
+import { useSession } from "next-auth/react"
 
 type props = {
     selectedChat: NullableChat
@@ -13,11 +14,17 @@ type NullableChat = Omit<Chat, 'id'> & { id?: string };
 
 const ChatContainer = (props: props) => {
 
+    const session = useSession()
+
+
+    const receiverId = props.selectedChat.firstUserId == session.data?.user.id ? props.selectedChat.secondUserId : props.selectedChat.firstUserId
+
+
 
     const { data, isSuccess, isLoading } = api.chat.getChatMessages.useQuery({
-        chatId: props.selectedChat.id,
+        receiverId: receiverId
         
-    },{enabled:!!props.selectedChat.id})
+    },{enabled:true})
 
   
 
