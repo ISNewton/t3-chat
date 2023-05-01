@@ -36,6 +36,11 @@ const chatRouter = createTRPCRouter({
           },
         ]
       },
+      orderBy: {
+        messages: {
+          _count:'desc'
+        }
+      },
       include: {
         firstUser: true,
         secondUser: true,

@@ -9,7 +9,9 @@ const UsersSearch = () => {
     const setSelectedChat = useStore(store => store.setSelectedChat)
     const session = useSession()
 
-    const { data, isLoading, } = api.users.search.useQuery(search)
+    const { data, isLoading, } = api.users.search.useQuery(search,{
+        enabled: !!search
+    })
 
     function openChat(user: User) {
         const chat = {
@@ -29,7 +31,7 @@ const UsersSearch = () => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
             />
-            {data && search && (
+            {data && data?.length > 0 && search && (
                 <div className="absolute z-10 w-1/4 border divide-y shadow max-h-72 overflow-y-auto bg-white">
                     {data.map(user => (
                         <div onClick={() => openChat(user)} className="block p-2 hover:bg-indigo-50 cursor-pointer">{user.username}</div>

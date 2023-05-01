@@ -33,7 +33,7 @@ export default ({ chat }: Props) => {
             selectedChat.firstUserId == chat.secondUserId)
 
     return (
-        <div onClick={() => setSelectedChat(chat)} className={`flex flex-row py-4 px-2 items-center border-l-4 border-b-2
+        <div onClick={() => setSelectedChat(chat)} className={`flex flex-row py-4 px-2 items-center border-l-4 border-b-2 transition-all duration-200 ease-in
          ${isSelectedChat ? ' border-b-gray-200 border-blue-400' : 'border-b-2'}  `}>
             <div className="w-1/4">
                 <UserAvatar user={receiverUser} />
