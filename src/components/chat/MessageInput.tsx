@@ -7,11 +7,18 @@ import { useSession } from "next-auth/react"
 const MessageInput = () => {
     const [message, setMessage] = useState<string>('')
 
+
     const { data } = useSession()
 
     const query = api.useContext()
 
-    const selectedChat = useStore(state => state.selectedChat)
+    const { selectedChat, setTopChat } = useStore(state => {
+        return {
+
+            selectedChat: state.selectedChat,
+            setTopChat: state.setTopChat,
+        }
+    })
 
     const { mutateAsync } = api.chat.sendMessage.useMutation(({
         async onSuccess(input) {
@@ -34,10 +41,14 @@ const MessageInput = () => {
             : selectedChat.firstUserId
 
 
-        mutateAsync({
+        await mutateAsync({
             content: message,
             receiverId
         })
+
+        //TODO: set top chat
+        // setTopChat()
+
     }
 
     function sendMessageOnEnterPress(e: any) {
