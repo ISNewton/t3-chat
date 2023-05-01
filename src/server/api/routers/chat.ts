@@ -60,9 +60,13 @@ const chatRouter = createTRPCRouter({
         messages = await prisma.message.findMany({
           where: {
             chatId: input.chatId
+          },
+          include: {
+            sender: true,
+            receiver: true,
           }
         })
-      } else if(input.receiverId) {
+      } else if (input.receiverId) {
         messages = await prisma.message.findMany({
           where: {
             OR: [
@@ -75,12 +79,16 @@ const chatRouter = createTRPCRouter({
                 receiverId: input.receiverId
               }
             ]
+          },
+          include: {
+            sender: true,
+            receiver: true
           }
         })
       }
       else {
         console.log(33333333333333);
-        
+
       }
       return messages
     }),

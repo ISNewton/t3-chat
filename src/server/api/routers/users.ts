@@ -15,7 +15,7 @@ import { hash } from "~/utils/hashHelper";
 export const usersRouter = createTRPCRouter({
     search: protectedProcedure
         .input(z.string())
-        .query(async ({ input , ctx }) => {
+        .query(async ({ input, ctx }) => {
             const users = await prisma.user.findMany({
                 where: {
                     username: {
@@ -27,5 +27,15 @@ export const usersRouter = createTRPCRouter({
                 }
             })
             return users
+        }),
+    getUser: protectedProcedure
+        .input(z.string())
+        .query(async ({ input }) => {
+            return await prisma.user.findUnique({
+                where: {
+                    id: input
+                }
+            })
         })
+
 });

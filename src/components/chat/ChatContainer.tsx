@@ -9,7 +9,7 @@ type props = {
     selectedChat: NullableChat
 }
 
-type NullableChat = Omit<Chat, 'id'> & { id?: string }; 
+type NullableChat = Omit<Chat, 'id'> & { id?: string };
 
 
 const ChatContainer = (props: props) => {
@@ -19,26 +19,24 @@ const ChatContainer = (props: props) => {
 
     const receiverId = props.selectedChat.firstUserId == session.data?.user.id ? props.selectedChat.secondUserId : props.selectedChat.firstUserId
 
-
-
     const { data, isSuccess, isLoading } = api.chat.getChatMessages.useQuery({
         receiverId: receiverId
-        
+
     })
 
-  
+    const { data: user } = api.users.getUser.useQuery(receiverId)
 
     if (!isSuccess) {
         return <h1>No messages yet</h1>
     }
 
-      if (isLoading) {
+    if (isLoading) {
         return <h1>Loading</h1>
     }
     return (
         <div className="flex flex-col mt-5 overflow-scroll">
             {data?.map((message) => (
-                <Message key={message.id} messageType="received" message={message.content} />
+                <Message sender={message.sender} key={message.id} messageType="received" message={message.content} />
             ))}
         </div>
     )

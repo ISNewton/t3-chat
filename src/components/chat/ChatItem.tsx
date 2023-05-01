@@ -19,9 +19,16 @@ export default ({ chat }: Props) => {
     const receiverUser = chat.firstUserId == session.data?.user.id ? chat.secondUser : chat.firstUser
 
 
-    const isSelectedChat =
-        (selectedChat?.firstUserId == session.data?.user.id && (selectedChat?.firstUserId == chat.firstUserId || selectedChat?.secondUserId == chat.secondUserId))
-        || (selectedChat?.secondUserId == session.data?.user.id && (selectedChat?.firstUserId == chat.firstUserId || selectedChat?.secondUserId == chat.secondUserId))
+    // Check if this chat is the selected chat by matching the users
+    // if 
+    //      chat
+    const isSelectedChat = 
+   ( selectedChat?.firstUserId == chat.firstUserId && 
+    selectedChat.secondUserId == chat.secondUserId)
+    ||
+    ( selectedChat?.secondUserId == chat.firstUserId && 
+        selectedChat.firstUserId == chat.secondUserId)
+
     return (
         <div onClick={() => setSelectedChat(chat)} className={`flex flex-row py-4 px-2 items-center
          ${isSelectedChat ? 'border-l-4 border-blue-400' : 'border-b-2'}  `}>

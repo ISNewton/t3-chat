@@ -1,9 +1,14 @@
+import { User } from "@prisma/client"
 import { signOut, useSession } from "next-auth/react"
 import Button from "~/components/buttons/Button"
+import UserAvatar from "~/components/chat/UserAvatar"
 import UsersSearch from "~/components/forms/UsersSearch"
 
 export default () => {
     const session = useSession()
+
+    // console.log(session.data?.user.image);
+    
 
 
     return (
@@ -14,11 +19,14 @@ export default () => {
             <Button onClick={() => signOut()}>
                 Log out
             </Button>
-            <div
+            {/* <div
                 className="h-12 w-12 p-2 bg-yellow-500 rounded-full text-white font-semibold flex items-center justify-center"
             >
                 RA
-            </div>
+            </div> */}
+            {session.status == 'authenticated' && <UserAvatar user={session.data?.user as User} />}
+
+
         </div>
     )
 }
