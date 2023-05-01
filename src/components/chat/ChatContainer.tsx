@@ -24,7 +24,7 @@ const ChatContainer = (props: props) => {
     const { data, isSuccess, isLoading } = api.chat.getChatMessages.useQuery({
         receiverId: receiverId
         
-    },{enabled:true})
+    })
 
   
 
@@ -37,8 +37,8 @@ const ChatContainer = (props: props) => {
     }
     return (
         <div className="flex flex-col mt-5 overflow-scroll">
-            {data.map((message, index) => (
-                <Message key={index} messageType="received" message={message.content} />
+            {data?.map((message, index) => (
+                <Message key={message.createdAt} messageType="received" message={message.content} />
             ))}
         </div>
     )
