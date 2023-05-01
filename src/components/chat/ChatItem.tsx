@@ -3,6 +3,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import useStore from "~/store";
 import UserAvatar from "./UserAvatar";
+import { api } from "~/utils/api";
 
 interface Props {
     chat: Chat & { firstUser: User, secondUser: User, messages: Message[] }
@@ -10,24 +11,26 @@ interface Props {
 }
 export default ({ chat }: Props) => {
 
-
-
-    const { selectedChat, setSelectedChat } = useStore()
+    const { selectedChat, setSelectedChat, selectedChatMessages } = useStore()
 
     const session = useSession()
+
+
+
 
     const receiverUser = chat.firstUserId == session.data?.user.id ? chat.secondUser : chat.firstUser
 
 
-    // Check if this chat is the selected chat by matching the users
-    // if 
-    //      chat
-    const isSelectedChat = 
-   ( selectedChat?.firstUserId == chat.firstUserId && 
-    selectedChat.secondUserId == chat.secondUserId)
-    ||
-    ( selectedChat?.secondUserId == chat.firstUserId && 
-        selectedChat.firstUserId == chat.secondUserId)
+    const { data } = api.chat.getChatMessages.useQuery({
+        receiverId: receiverUser.id
+    })
+
+    const isSelectedChat =
+        (selectedChat?.firstUserId == chat.firstUserId &&
+            selectedChat.secondUserId == chat.secondUserId)
+        ||
+        (selectedChat?.secondUserId == chat.firstUserId &&
+            selectedChat.firstUserId == chat.secondUserId)
 
     return (
         <div onClick={() => setSelectedChat(chat)} className={`flex flex-row py-4 px-2 items-center
@@ -41,7 +44,7 @@ export default ({ chat }: Props) => {
                 <div className="text-lg font-semibold">
                     {receiverUser.username}
                 </div>
-                <span className="text-gray-500">{chat.messages[0]?.content}</span>
+                <span className="text-gray-500">{selectedChat?.id == chat.id ? (data[data?.length - 1]?.content ?? '') : chat.messages[0]?.content}</span>
             </div>
         </div>
     )
