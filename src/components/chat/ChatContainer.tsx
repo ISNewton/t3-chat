@@ -37,7 +37,7 @@ const ChatContainer = (props: props) => {
     }
     return (
         <div className="flex flex-col mt-5 overflow-scroll">
-            {data?.map((message, index) => (
+            {data?.map((message) => (
                 <Message key={message.id} messageType="received" message={message.content} />
             ))}
         </div>

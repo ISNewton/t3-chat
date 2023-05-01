@@ -2,6 +2,7 @@ import { Chat, Message, User } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import useStore from "~/store";
+import UserAvatar from "./UserAvatar";
 
 interface Props {
     chat: Chat & { firstUser: User, secondUser: User, messages: Message[] }
@@ -25,20 +26,7 @@ export default ({ chat }: Props) => {
         <div onClick={() => setSelectedChat(chat)} className={`flex flex-row py-4 px-2 items-center
          ${isSelectedChat ? 'border-l-4 border-blue-400' : 'border-b-2'}  `}>
             <div className="w-1/4">
-                {receiverUser.image ? (
-                    <Image
-                        width='48'
-                        height='48'
-                        src={`/avatars/${receiverUser.image}`}
-                        className="object-cover h-12 w-12 rounded-full"
-                        alt="avatar"
-                    />
-                ) : (
-                    <div className="bg-red-500 object-cover h-12 w-12 rounded-full flex font-bold justify-center items-center">
-                        <p className="text-white">{receiverUser.username?.slice(0, 2).toUpperCase()}</p>
-                    </div>
-                )
-                }
+                <UserAvatar user={receiverUser} />
 
 
             </div>
