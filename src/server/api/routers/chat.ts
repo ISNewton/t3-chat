@@ -44,7 +44,6 @@ const chatRouter = createTRPCRouter({
         }
       }
     })
-    console.log(chats[0] , 'cats');
     
     return chats
   }),
@@ -57,9 +56,6 @@ const chatRouter = createTRPCRouter({
           chatId: input.chatId
         }
       })
-      console.log('logging getChatMessages');
-      console.log(messages);
-      console.log('logging getChatMessages');
 
       return messages
     }),
@@ -104,7 +100,6 @@ const chatRouter = createTRPCRouter({
         }
       })
 
-      console.log(3434343434, message, chat)
     })
 
 });

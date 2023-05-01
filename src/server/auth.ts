@@ -89,7 +89,6 @@ export const authOptions: NextAuthOptions = {
           } catch {
             return null;
           }
-          console.log(45545)
           const user = await prisma.user.findFirst({
             where: {
               username: input.username

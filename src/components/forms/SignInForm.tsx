@@ -173,8 +173,6 @@ const SignInForm = ({ isLogin }: FormProps) => {
                                     </label>
                                     <FileInput
                                         onChange={(e) => {
-                                            console.log(e.currentTarget)
-                                            console.log(e.currentTarget.files)
                                             if (e.currentTarget?.files && e.currentTarget?.files[0]) {
                                                 setFile(e.currentTarget.files[0])
                                             }

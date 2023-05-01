@@ -4,13 +4,12 @@ import Image from "next/image";
 import useStore from "~/store";
 
 interface Props {
-    chat: Chat & { firstUser: User, secondUser: User , messages:Message[] }
+    chat: Chat & { firstUser: User, secondUser: User, messages: Message[] }
     // chat: any
 }
 export default ({ chat }: Props) => {
 
-    console.log(chat);
-    
+
 
     const { selectedChat, setSelectedChat } = useStore()
 
@@ -19,10 +18,12 @@ export default ({ chat }: Props) => {
     const receiverUser = chat.firstUserId == session.data?.user.id ? chat.secondUser : chat.firstUser
 
 
-
+    const isSelectedChat =
+        (selectedChat?.firstUserId == session.data?.user.id && (selectedChat?.firstUserId == chat.firstUserId || selectedChat?.secondUserId == chat.secondUserId))
+        || (selectedChat?.secondUserId == session.data?.user.id && (selectedChat?.firstUserId == chat.firstUserId || selectedChat?.secondUserId == chat.secondUserId))
     return (
         <div onClick={() => setSelectedChat(chat)} className={`flex flex-row py-4 px-2 items-center
-         ${selectedChat?.id == chat.id ? 'border-l-4 border-blue-400' : 'border-b-2'}  `}>
+         ${isSelectedChat ? 'border-l-4 border-blue-400' : 'border-b-2'}  `}>
             <div className="w-1/4">
                 {receiverUser.image ? (
                     <Image

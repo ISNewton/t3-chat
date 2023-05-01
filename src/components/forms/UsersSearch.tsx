@@ -9,13 +9,12 @@ const UsersSearch = () => {
     const setSelectedChat = useStore(store => store.setSelectedChat)
     const session = useSession()
 
-    const { data, isLoading ,  } = api.users.search.useQuery(search)
+    const { data, isLoading, } = api.users.search.useQuery(search)
 
-    function openChat(user:User) {
-        const chat  = {
-            firstUserId : session.data?.user.id,
-            secondUserId : user.id,
-            id: 'a'
+    function openChat(user: User) {
+        const chat = {
+            firstUserId: session.data?.user.id,
+            secondUserId: user.id,
         } as Chat
         setSelectedChat(chat)
         setSearch('')
@@ -25,8 +24,6 @@ const UsersSearch = () => {
         <div className="w-1/2">
             <input
                 type="text"
-                name=""
-                id=""
                 placeholder="Search Username"
                 className="rounded-2xl bg-gray-100 py-3 px-5 w-full"
                 value={search}

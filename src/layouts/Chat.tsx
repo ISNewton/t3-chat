@@ -12,7 +12,7 @@ export default () => {
 
     return (
         <div className="w-full px-5 flex flex-col justify-between">
-            {selectedChat?.id && <ChatContainer selectedChat={selectedChat} />}
+            {selectedChat && <ChatContainer selectedChat={selectedChat} />}
             {selectedChat && (
                 <MessageInput />
             )}

@@ -4,13 +4,13 @@ import { api } from "~/utils/api"
 
 export default () => {
 
-    const {data , isSuccess} = api.chat.getAllChats.useQuery()
+    const { data, isSuccess } = api.chat.getAllChats.useQuery()
 
 
-    if(!isSuccess) {
+    if (!isSuccess) {
         return <p>No chats</p>
     }
-    
+
     return (
         <div className="flex flex-col w-2/5 border-r-2 overflow-y-auto">
             <div className="border-b-2 py-4 px-2">
@@ -21,7 +21,7 @@ export default () => {
                 />
             </div>
             {data.map(chat => (
-            <ChatItem key={chat.id} chat={chat} />
+                <ChatItem key={chat.id} chat={chat} />
             ))}
         </div>
     )

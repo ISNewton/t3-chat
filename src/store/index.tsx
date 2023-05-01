@@ -1,25 +1,31 @@
 import { Chat, Message } from '@prisma/client'
 import { create } from 'zustand'
 
+  
+type NullableChat = Omit<Chat, 'id'> & { id?: string }; 
+
+
+
 interface storeState {
-    selectedChat: Chat | null,
-    setSelectedChat: (chat : Chat) => void
+    selectedChat: NullableChat | null,
+    setSelectedChat: (chat: NullableChat) => void
     selectedChatMessages: string[],
-    appendMessageToSelectedChatMessages: (message:string[] | []) => void
+    appendMessageToSelectedChatMessages: (message: string[] | []) => void
 }
+
 
 
 const useStore = create<storeState>((set) => ({
     selectedChat: null,
-    setSelectedChat: (chat:Chat) => {
+    setSelectedChat: (chat: NullableChat) => {
         set((state) => ({ selectedChat: chat }))
     },
     selectedChatMessages: [],
-    appendMessageToSelectedChatMessages(message:string[] | []) {
-        
+    appendMessageToSelectedChatMessages(message: string[] | []) {
+
         set(state => {
             return {
-                selectedChatMessages: [ ...(message as []) ]
+                selectedChatMessages: [...(message as [])]
             }
         })
 
