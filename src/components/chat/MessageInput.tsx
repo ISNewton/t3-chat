@@ -11,17 +11,11 @@ const MessageInput = () => {
 
     const query = api.useContext()
 
-    const { selectedChat }
-        = useStore(state => {
-            return {
-                selectedChat: state.selectedChat,
-            }
-        })
+    const selectedChat = useStore(state => state.selectedChat)
 
     const { mutateAsync } = api.chat.sendMessage.useMutation(({
         async onSuccess(input) {
             await query.chat.getChatMessages.invalidate()
-
 
         }
     }))
@@ -45,6 +39,15 @@ const MessageInput = () => {
             receiverId
         })
     }
+
+    function sendMessageOnEnterPress(e: any) {
+        if (e.key === 'Enter') {
+            sendMessage()
+
+        }
+
+
+    }
     return (
         <div className="py-5">
             <div className="grid grid-cols-10 gap-2 items-center">
@@ -54,8 +57,9 @@ const MessageInput = () => {
                     className="w-full bg-gray-300 py-5 px-3 rounded-xl col-span-9"
                     type="text"
                     placeholder="type your message here..."
+                    onKeyUp={sendMessageOnEnterPress}
                 />
-                <Button onKeyUp={sendMessage} onClick={sendMessage} disabled={!message}>
+                <Button onClick={sendMessage} disabled={!message}>
                     Send
                 </Button>
             </div>
