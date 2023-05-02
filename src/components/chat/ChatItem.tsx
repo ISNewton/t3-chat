@@ -38,7 +38,6 @@ export default ({ chat }: Props) => {
             <div className="w-1/4">
                 <UserAvatar user={receiverUser} />
 
-
             </div>
             <div className="w-full">
                 <div className="text-lg font-semibold">

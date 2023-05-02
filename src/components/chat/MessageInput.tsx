@@ -47,7 +47,7 @@ const MessageInput = () => {
         })
 
         //TODO: set top chat
-        // setTopChat()
+        setTopChat(selectedChat)
 
     }
 
