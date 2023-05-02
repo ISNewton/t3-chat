@@ -45,11 +45,16 @@ const SignInForm = ({ isLogin }: FormProps) => {
         password: String,
         username?: String
     }) {
+
+        
         const result = await signIn("credentials", {
             redirect: false,
             username: values.username,
             password: values.password,
         });
+
+        console.log('sign in'  , result);
+
 
         if (!result?.ok) {
             setError("البريد الالكتروني او كلمة المرور غير صحيحة");
@@ -62,7 +67,7 @@ const SignInForm = ({ isLogin }: FormProps) => {
             // toast.success('Welcome back !', {
             //     theme: "colored",
             // })
-            // replace("/")
+            replace("/")
 
         }
 
