@@ -14,8 +14,6 @@ const UsersSearch = () => {
         enabled: !!search
     })
 
-    
-
     function openChat(user: User) {
         const chat = {
             firstUserId: session.data?.user.id,
@@ -35,9 +33,9 @@ const UsersSearch = () => {
                 onChange={(e) => setSearch(e.target.value)}
             />
             {data && data?.length > 0 && search && (
-                <div className="absolute z-10 w-1/4 border divide-y shadow max-h-72 overflow-y-auto bg-white">
+                <div  className="absolute z-10 w-1/4 border divide-y shadow max-h-72 overflow-y-auto bg-white">
                     {data.map(user => (
-                        <div onClick={() => openChat(user)} className="block p-2 hover:bg-indigo-50 cursor-pointer">{user.username}</div>
+                        <div key={user.id} onClick={() => openChat(user)} className="block p-2 hover:bg-indigo-50 cursor-pointer">{user.username}</div>
                     ))}
                 </div>
 

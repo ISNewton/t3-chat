@@ -13,11 +13,11 @@ import { NextPageContext } from 'next';
 
 import { type AppRouter } from "~/server/api/root";
 
-const getBaseUrl = () => {
-  if (typeof window !== "undefined") return ""; // browser should use relative url
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; // SSR should use vercel url
-  return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
-};
+// const getBaseUrl = () => {
+//   if (typeof window !== "undefined") return ""; // browser should use relative url
+//   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; // SSR should use vercel url
+//   return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
+// };
 
 
 
@@ -26,9 +26,10 @@ function getEndingLink(ctx: NextPageContext | undefined) {
   console.log(33333);
   console.log(typeof window);
   
-  if (typeof window === 'undefined') {
+  // if (typeof window === 'undefined') {
     return httpBatchLink({
-      url: `${'http://localhost:3000'}/api/trpc`,
+      url: `${process.env.APP_URL}/api/trpc`,
+      // url: `${process.env.APP_URL}/api/trpc`,
       headers() {
         if (!ctx?.req?.headers) {
           return {};
@@ -40,7 +41,7 @@ function getEndingLink(ctx: NextPageContext | undefined) {
         };
       },
     });
-  }
+  // }
   const client = createWSClient({
     url: 'ws://localhost:3001',
   });
@@ -77,9 +78,10 @@ export const api = createTRPCNext<AppRouter>({
         // wsLink({
         //   client: wsClient,
         // }),
-        httpBatchLink({
-          url: `${getBaseUrl()}/api/trpc`,
-        }),
+        // httpBatchLink({
+        //   url: `${getBaseUrl()}/api/trpc`,
+        // }),
+        getEndingLink(ctx)
       ],
     };
   },

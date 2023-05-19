@@ -4,11 +4,10 @@ import { loggerLink } from '@trpc/client/links/loggerLink';
 import { wsLink, createWSClient } from '@trpc/client/links/wsLink';
 import { withTRPC } from '@trpc/next';
 import { getSession, SessionProvider } from 'next-auth/react';
-import getConfig from 'next/config';
 import { AppType } from 'next/dist/shared/lib/utils';
-// import type { AppRouter } from 'server/routers/_app';
 import superjson from 'superjson';
 import Layout from '~/layouts/Layout';
+import { AppRouter } from '~/server/api/root';
 
 
 // const { APP_URL, WS_URL } = publicRuntimeConfig;
@@ -33,19 +32,23 @@ MyApp.getInitialProps = async ({ ctx }) => {
 
 function getEndingLink() {
   // if (typeof window === 'undefined') {
+    console.log(121212121212)
+    console.log(`${process.env.APP_URL}/api/trpc`)
+    // console.log(`${getBaseUrl()}/api/trpc`)
     return httpBatchLink({
-      url: `${process.env.APP_URL}/api/trpc`,
+      url: `http://localhost:3000/api/trpc`,
+      // url: `${process.env.APP_URL}/api/trpc`,
     });
   // }
   // const client = createWSClient({
   //   url: 'ws:localhost::3001',
   // });
-  // return wsLink<any>({
+  // return wsLink<AppRouter>({
   //   client,
   // });
 }
 
-export default withTRPC<any>({
+export default withTRPC<AppRouter>({
   config({ ctx }) {
     /**
      * If you want to use SSR, you need to use the server's full URL

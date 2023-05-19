@@ -16,6 +16,7 @@ export const usersRouter = createTRPCRouter({
     search: protectedProcedure
         .input(z.string())
         .query(async ({ input, ctx }) => {
+            console.log(3434343434 , input)
             const users = await prisma.user.findMany({
                 where: {
                     username: {
