@@ -11,7 +11,13 @@ import superjson from "superjson";
 import { NextPageContext } from 'next';
 
 
+const { publicRuntimeConfig } = getConfig();
+
+const { APP_URL, WS_URL } = publicRuntimeConfig;
+
+
 import { type AppRouter } from "~/server/api/root";
+import getConfig from "next/config";
 
 // const getBaseUrl = () => {
 //   if (typeof window !== "undefined") return ""; // browser should use relative url
@@ -23,13 +29,9 @@ import { type AppRouter } from "~/server/api/root";
 
 
 function getEndingLink(ctx: NextPageContext | undefined) {
-  console.log(33333);
-  console.log(typeof window);
-  
-  // if (typeof window === 'undefined') {
+  if (typeof window === 'undefined') {
     return httpBatchLink({
-      url: `${process.env.APP_URL}/api/trpc`,
-      // url: `${process.env.APP_URL}/api/trpc`,
+      url: `${APP_URL}/api/trpc`,
       headers() {
         if (!ctx?.req?.headers) {
           return {};
@@ -41,9 +43,10 @@ function getEndingLink(ctx: NextPageContext | undefined) {
         };
       },
     });
-  // }
+  }
+  console.log('ws call')
   const client = createWSClient({
-    url: 'ws://localhost:3001',
+  url: WS_URL,
   });
   return wsLink<AppRouter>({
     client,
