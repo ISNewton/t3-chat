@@ -8,15 +8,17 @@ import getConfig from 'next/config';
 import { AppType } from 'next/dist/shared/lib/utils';
 // import type { AppRouter } from 'server/routers/_app';
 import superjson from 'superjson';
+import Layout from '~/layouts/Layout';
 
-const { publicRuntimeConfig } = getConfig();
 
 // const { APP_URL, WS_URL } = publicRuntimeConfig;
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
     <SessionProvider session={pageProps.session}>
+      <Layout>
       <Component {...pageProps} />
+        </Layout>
     </SessionProvider>
   );
 };
@@ -32,7 +34,7 @@ MyApp.getInitialProps = async ({ ctx }) => {
 function getEndingLink() {
   // if (typeof window === 'undefined') {
     return httpBatchLink({
-      url: `${'http://localhost::3000'}/api/trpc`,
+      url: `${process.env.APP_URL}/api/trpc`,
     });
   // }
   // const client = createWSClient({
