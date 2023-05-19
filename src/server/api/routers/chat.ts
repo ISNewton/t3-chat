@@ -1,5 +1,6 @@
 
 import { Chat, Message } from "@prisma/client";
+import { now } from "next-auth/client/_utils";
 import { z } from "zod";
 import {
   createTRPCRouter,
@@ -37,9 +38,7 @@ const chatRouter = createTRPCRouter({
         ]
       },
       orderBy: {
-        messages: {
-          _count:'desc'
-        }
+        lastMessageCreatedAt: 'desc'
       },
       include: {
         firstUser: true,
@@ -92,8 +91,6 @@ const chatRouter = createTRPCRouter({
         })
       }
       else {
-        console.log(33333333333333);
-
       }
       return messages
     }),
@@ -117,15 +114,26 @@ const chatRouter = createTRPCRouter({
         }
       })
 
+
       if (!chat) {
         chat = await prisma.chat.create({
           data: {
             firstUserId: ctx.session.user.id,
-            secondUserId: input.receiverId
+            secondUserId: input.receiverId,
+            lastMessageCreatedAt: new Date()
+          }
+        })
+      } else {
+        await prisma.chat.update({
+          where: {
+            id: chat.id
+          },
+          data: {
+            lastMessageCreatedAt: new Date()
+
           }
         })
       }
-
 
 
 
@@ -137,7 +145,6 @@ const chatRouter = createTRPCRouter({
           senderId: ctx.session?.user.id
         }
       })
-
     })
 
 });

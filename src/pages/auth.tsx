@@ -14,7 +14,7 @@ import { api } from "~/utils/api"
 
 const Auth = () => {
 
-    const [isLogin, setIsLogin] = useState(false)
+    const [isLogin, setIsLogin] = useState(true)
 
 
     return (

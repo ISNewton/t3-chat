@@ -1,35 +1,91 @@
-import { type AppType } from "next/app";
-import { type Session } from "next-auth";
-import { SessionProvider } from "next-auth/react";
+import '../styles/globals.css'
+import { httpBatchLink } from '@trpc/client/links/httpBatchLink';
+import { loggerLink } from '@trpc/client/links/loggerLink';
+import { wsLink, createWSClient } from '@trpc/client/links/wsLink';
+import { withTRPC } from '@trpc/next';
+import { getSession, SessionProvider } from 'next-auth/react';
+import getConfig from 'next/config';
+import { AppType } from 'next/dist/shared/lib/utils';
+// import type { AppRouter } from 'server/routers/_app';
+import superjson from 'superjson';
 
-import { api } from "~/utils/api";
+const { publicRuntimeConfig } = getConfig();
 
-import "~/styles/globals.css";
-import Layout from "~/layouts/Layout";
-import type { AppProps } from 'next/app'
-import { ReactElement, ReactNode } from "react";
-import { NextPage } from "next";
+// const { APP_URL, WS_URL } = publicRuntimeConfig;
 
-export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
-  getLayout?: (page: ReactElement) => ReactNode
-}
-
-type AppPropsWithLayout = AppProps & {
-  Component: NextPageWithLayout
-}
-
-const MyApp = ({ Component, pageProps }: AppPropsWithLayout) => {
-  const getLayout = Component.getLayout || ((page) => <Layout children={page} />)
-
+const MyApp: AppType = ({ Component, pageProps }) => {
   return (
     <SessionProvider session={pageProps.session}>
-      {getLayout(<Component {...pageProps} />)}
-
+      <Component {...pageProps} />
     </SessionProvider>
-  )
+  );
+};
 
+MyApp.getInitialProps = async ({ ctx }) => {
+  return {
+    pageProps: {
+      session: await getSession(ctx),
+    },
+  };
+};
+
+function getEndingLink() {
+  // if (typeof window === 'undefined') {
+    return httpBatchLink({
+      url: `${'http://localhost::3000'}/api/trpc`,
+    });
+  // }
+  // const client = createWSClient({
+  //   url: 'ws:localhost::3001',
+  // });
+  // return wsLink<any>({
+  //   client,
+  // });
 }
 
+export default withTRPC<any>({
+  config({ ctx }) {
+    /**
+     * If you want to use SSR, you need to use the server's full URL
+     * @link https://trpc.io/docs/ssr
+     */
 
-
-export default api.withTRPC(MyApp);
+    return {
+      /**
+       * @link https://trpc.io/docs/links
+       */
+      links: [
+        // adds pretty logs to your console in development and logs errors in production
+        loggerLink({
+          enabled: (opts) =>
+            (process.env.NODE_ENV === 'development' &&
+              typeof window !== 'undefined') ||
+            (opts.direction === 'down' && opts.result instanceof Error),
+        }),
+        getEndingLink(),
+      ],
+      /**
+       * @link https://trpc.io/docs/data-transformers
+       */
+      transformer: superjson,
+      /**
+       * @link https://react-query.tanstack.com/reference/QueryClient
+       */
+      queryClientConfig: { defaultOptions: { queries: { staleTime: 60 } } },
+      headers: () => {
+        if (ctx?.req) {
+          // on ssr, forward client's headers to the server
+          return {
+            ...ctx.req.headers,
+            'x-ssr': '1',
+          };
+        }
+        return {};
+      },
+    };
+  },
+  /**
+   * @link https://trpc.io/docs/ssr
+   */
+  ssr: true,
+})(MyApp);

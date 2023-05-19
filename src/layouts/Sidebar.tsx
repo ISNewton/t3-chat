@@ -6,21 +6,11 @@ export default () => {
 
     const { data, isSuccess } = api.chat.getAllChats.useQuery()
 
-    const topChat = useStore(state => state.topChat)
-
     if (!isSuccess) {
         return <p>No chats</p>
     }
 
-    console.log('top chat',topChat);
 
-    let sortedData = data
-
-    if(topChat) {
-        // sortedData = data.map(chat => {
-            
-        // })
-    }
     
 
 

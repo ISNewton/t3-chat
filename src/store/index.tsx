@@ -11,8 +11,6 @@ interface storeState {
     setSelectedChat: (chat: NullableChat) => void
     selectedChatMessages: string[],
     appendMessageToSelectedChatMessages: (message: string[] | []) => void,
-    topChat: NullableChat | null,
-    setTopChat: (chat: NullableChat) => void
 }
 
 
@@ -31,10 +29,6 @@ const useStore = create<storeState>((set) => ({
             }
         })
 
-    },
-    topChat: null,
-    setTopChat(chat: NullableChat) {
-        set(state => ({ topChat: chat }))
     }
 }))
 

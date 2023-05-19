@@ -8,10 +8,13 @@ const UsersSearch = () => {
     const [search, setSearch] = useState<string>('')
     const setSelectedChat = useStore(store => store.setSelectedChat)
     const session = useSession()
+    
 
     const { data, isLoading, } = api.users.search.useQuery(search,{
         enabled: !!search
     })
+
+    
 
     function openChat(user: User) {
         const chat = {
@@ -27,7 +30,7 @@ const UsersSearch = () => {
             <input
                 type="text"
                 placeholder="Search Username"
-                className="rounded-2xl bg-gray-100 py-3 px-5 w-full"
+                className="rounded-2xl outline-none focus:outline-none  bg-gray-100 py-3 px-5 w-full"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
             />

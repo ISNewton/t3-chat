@@ -7,10 +7,6 @@ import UsersSearch from "~/components/forms/UsersSearch"
 export default () => {
     const session = useSession()
 
-    // console.log(session.data?.user.image);
-    
-
-
     return (
         <div className="px-5 py-5 flex justify-between items-center bg-white border-b-2">
             <div className="font-semibold text-2xl">GoingChat , {session.data?.user.username}</div>

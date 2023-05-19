@@ -12,17 +12,17 @@ const MessageInput = () => {
 
     const query = api.useContext()
 
-    const { selectedChat, setTopChat } = useStore(state => {
+    const { selectedChat } = useStore(state => {
         return {
 
             selectedChat: state.selectedChat,
-            setTopChat: state.setTopChat,
         }
     })
 
     const { mutateAsync } = api.chat.sendMessage.useMutation(({
         async onSuccess(input) {
             await query.chat.getChatMessages.invalidate()
+            await query.chat.getAllChats.invalidate()
 
         }
     }))
@@ -45,10 +45,6 @@ const MessageInput = () => {
             content: message,
             receiverId
         })
-
-        //TODO: set top chat
-        setTopChat(selectedChat)
-
     }
 
     function sendMessageOnEnterPress(e: any) {
