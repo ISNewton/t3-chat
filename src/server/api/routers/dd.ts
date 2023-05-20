@@ -43,7 +43,8 @@ const roomRouter = createTRPCRouter({
       const post = { ...opts.input }; /* [..] add to db */
 
       console.log('add funtion 3333333333333333')
-      ee.emit('add', post);
+  const i =     ee.emit('add', post);
+  console.log(i , 44)
       return post;
     }),
 });
